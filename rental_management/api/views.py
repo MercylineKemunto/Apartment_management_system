@@ -1,6 +1,6 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum, Count
 from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import (
@@ -80,3 +80,68 @@ class NotificationViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['user', 'is_read']
     ordering_fields = ['created_at']
+
+
+@login_required
+def dashboard(request):
+    # Apartment Statistics
+    total_apartments = Apartment.objects.count()
+    total_units = Unit.objects.count()
+    occupied_units = Unit.objects.filter(is_occupied=True).count()
+    vacant_units = total_units - occupied_units
+
+    # Financial Summary
+    total_monthly_revenue = Unit.objects.aggregate(total_rent=Sum('rent_amount'))['total_rent'] or 0
+    total_outstanding_debts = Debt.objects.filter(is_paid=False).aggregate(total=Sum('amount'))['total'] or 0
+
+    # Maintenance Requests
+    open_maintenance_requests = MaintenanceRequest.objects.filter(status='Open').count()
+    recent_maintenance_requests = MaintenanceRequest.objects.filter(status='Open')[:5]
+
+    # Recent Leases
+    recent_leases = Lease.objects.order_by('-start_date')[:5]
+
+    # Upcoming Payments
+    upcoming_payments = Debt.objects.filter(is_paid=False).order_by('due_date')[:5]
+
+    context = {
+        'total_apartments': total_apartments,
+        'occupied_units': occupied_units,
+        'vacant_units': vacant_units,
+        'total_monthly_revenue': total_monthly_revenue,
+        'total_outstanding_debts': total_outstanding_debts,
+        'open_maintenance_requests': open_maintenance_requests,
+        'recent_maintenance_requests': recent_maintenance_requests,
+        'recent_leases': recent_leases,
+        'upcoming_payments': upcoming_payments,
+    }
+    return render(request, 'dashboard.html', context)
+
+@login_required
+def apartments_list(request):
+    apartments = Apartment.objects.all()
+    return render(request, 'apartments/list.html', {'apartments': apartments})
+
+@login_required
+def apartment_detail(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk)
+    units = apartment.units.all()
+    return render(request, 'apartments/detail.html', {
+        'apartment': apartment,
+        'units': units
+    })
+
+@login_required
+def create_apartment(request):
+    if request.method == 'POST':
+        # Handle form submission
+        pass
+    return render(request, 'apartments/create.html')
+
+@login_required
+def edit_apartment(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk)
+    if request.method == 'POST':
+        # Handle form submission
+        pass
+    return render(request, 'apartments/edit.html', {'apartment': apartment})

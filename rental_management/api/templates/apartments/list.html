@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Apartments List{% endblock %}
+
+{% block page_title %}Apartments{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'create_apartment' %}" class="btn btn-primary">Add New Apartment</a>
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Manager</th>
+                <th>Created At</th>
+                <th>Units</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for apartment in apartments %}
+            <tr>
+                <td>{{ apartment.name }}</td>
+                <td>{{ apartment.address }}</td>
+                <td>{{ apartment.manager.username }}</td>
+                <td>{{ apartment.created_at|date:"Y-m-d" }}</td>
+                <td>{{ apartment.units.count }}</td>
+                <td>
+                    <a href="{% url 'apartment_detail' apartment.id %}" class="btn btn-sm btn-info">View</a>
+                    <a href="{% url 'edit_apartment' apartment.id %}" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

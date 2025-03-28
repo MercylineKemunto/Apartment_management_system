@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Apartment Management{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                Apartments Overview
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_apartments }} Total Apartments</h5>
+                <p class="card-text">
+                    Occupied Units: {{ occupied_units }}<br>
+                    Vacant Units: {{ vacant_units }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                Financial Summary
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${{ total_monthly_revenue|floatformat:2 }}</h5>
+                <p class="card-text">
+                    Total Rent Collection<br>
+                    Outstanding Debts: ${{ total_outstanding_debts|floatformat:2 }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                Maintenance Requests
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ open_maintenance_requests }} Open Requests</h5>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in recent_maintenance_requests %}
+                        <tr>
+                            <td>{{ request.unit.unit_number }}</td>
+                            <td>{{ request.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Recent Leases
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tenant</th>
+                            <th>Unit</th>
+                            <th>Start Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lease in recent_leases %}
+                        <tr>
+                            <td>{{ lease.tenant.username }}</td>
+                            <td>{{ lease.unit.unit_number }}</td>
+                            <td>{{ lease.start_date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Upcoming Payments
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tenant</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for debt in upcoming_payments %}
+                        <tr>
+                            <td>{{ debt.lease.tenant.username }}</td>
+                            <td>${{ debt.amount|floatformat:2 }}</td>
+                            <td>{{ debt.due_date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
