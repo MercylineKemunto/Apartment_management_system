@@ -18,4 +18,5 @@ router.register(r'notifications', NotificationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('maintenance_requests/', MaintenanceRequestViewSet.as_view({'get': 'list', 'post': 'create'}), name='maintenance_requests_list'),
 ]

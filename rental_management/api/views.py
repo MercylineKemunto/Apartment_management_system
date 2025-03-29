@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import (
     Apartment, Unit, Lease, Payment, 
-    Debt, MaintenanceRequest, Expense, Notification
+    Debt, MaintenanceRequest, Expense, Notification,
 )
 from .serializers import (
     ApartmentSerializer, UnitSerializer, LeaseSerializer, 
@@ -64,6 +64,7 @@ class MaintenanceRequestViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['unit', 'status']
     search_fields = ['description']
+    template_name = 'maintenance_requests_list.html'  
 
 class ExpenseViewSet(viewsets.ModelViewSet):
     queryset = Expense.objects.all()
@@ -84,24 +85,23 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 @login_required
 def dashboard(request):
-    # Apartment Statistics
     total_apartments = Apartment.objects.count()
     total_units = Unit.objects.count()
     occupied_units = Unit.objects.filter(is_occupied=True).count()
     vacant_units = total_units - occupied_units
 
-    # Financial Summary
+    
     total_monthly_revenue = Unit.objects.aggregate(total_rent=Sum('rent_amount'))['total_rent'] or 0
     total_outstanding_debts = Debt.objects.filter(is_paid=False).aggregate(total=Sum('amount'))['total'] or 0
 
-    # Maintenance Requests
+    
     open_maintenance_requests = MaintenanceRequest.objects.filter(status='Open').count()
     recent_maintenance_requests = MaintenanceRequest.objects.filter(status='Open')[:5]
 
-    # Recent Leases
+   
     recent_leases = Lease.objects.order_by('-start_date')[:5]
 
-    # Upcoming Payments
+    
     upcoming_payments = Debt.objects.filter(is_paid=False).order_by('due_date')[:5]
 
     context = {
@@ -134,7 +134,7 @@ def apartment_detail(request, pk):
 @login_required
 def create_apartment(request):
     if request.method == 'POST':
-        # Handle form submission
+       
         pass
     return render(request, 'apartments/create.html')
 
@@ -142,6 +142,19 @@ def create_apartment(request):
 def edit_apartment(request, pk):
     apartment = get_object_or_404(Apartment, pk=pk)
     if request.method == 'POST':
-        # Handle form submission
+        
         pass
     return render(request, 'apartments/edit.html', {'apartment': apartment})
+def units_list(request):
+   
+    context = {
+        'title': 'Units List'
+    }
+    return render(request, 'units_list.html', context)
+
+def leases_list(request):
+    
+    context = {
+        'title': 'Leases List'
+    }
+    return render(request, 'leases_list.html', context)

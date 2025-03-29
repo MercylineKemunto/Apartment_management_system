@@ -29,5 +29,8 @@ urlpatterns = [
     path('apartments/<int:pk>/', views.apartment_detail, name='apartment_detail'),
     path('apartments/<int:pk>/edit/', views.edit_apartment, name='edit_apartment'),
     path('api/', include('api.urls')),
+    path('units/', views.units_list, name='units_list'),
+    path('leases/', views.leases_list, name='leases_list'),
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
