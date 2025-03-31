@@ -1,113 +1,128 @@
-# Apartment Management System
-
-## Overview
-
-This project is an **Apartment Management System** built using Django and Django REST Framework. The goal of this system is to facilitate the management of apartment rentals, including features for leases, payments, maintenance requests, and notifications.
-
-## Project Structure
-
-The main components of the project include:
-
-- **Models**: Defined in `models.py`, these represent the core database schema for the application, including:
-  - `Apartment`: Represents an apartment building.
-  - `Unit`: Represents individual rental units within an apartment.
-  - `Lease`: Connects tenants to units with specific rental terms.
-  - `Payment`: Tracks rent payments associated with leases.
-  - `Debt`: Manages overdue payments.
-  - `MaintenanceRequest`: Logs maintenance issues submitted by tenants.
-  - `Expense`: Tracks shared expenses incurred by the apartment.
-  - `Notification`: Manages alerts and notifications for users.
 # Property Management System
 
 ## Project Overview
-A comprehensive Django-based Property Management System that allows management of apartments, units, leases, payments, maintenance requests, and more.
+A comprehensive Django-based Property Management System that allows management of properties, units, leases, tenants, payments, maintenance requests, and more.
 
 ## Features
-- Apartment Management
-- Unit Tracking
-- Lease Management
-- Payment Processing
-- Maintenance Request Handling
-- Expense Tracking
-- Notification System
+* Property & Building Management
+* Unit Tracking and Inventory
+* Tenant Information Management
+* Lease Creation, Document Generation, and Management
+* Payment Processing and Financial Tracking
+* Maintenance Request Workflow
+* Occupancy Tracking and Statistics
+* Dashboard with Key Performance Indicators
+* Email Communication System
+* Reporting and Data Visualization
 
 ## Setup Instructions
 
 ### Prerequisites
-- Python 3.9+
-- pip (Python package manager)
+* Python 3.9+
+* pip (Python package manager)
+* Django 4.2+
 
 ### Installation Steps
 1. Clone the repository
 2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+
+```
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
 3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+
+```
+pip install -r requirements.txt
+```
 
 4. Set up the database:
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
 
 5. Create a superuser:
-   ```bash
-   python manage.py createsuperuser
-   ```
+
+```
+python manage.py createsuperuser
+```
 
 6. Run the development server:
-   ```bash
-   python manage.py runserver
-   ```
+
+```
+python manage.py runserver
+```
+
+## Models
+
+### Core Models
+* **Property**: Represents a real estate property with name, address, and owner
+* **Unit**: Individual rental units with details like size, bedrooms, bathrooms, and rent
+* **Tenant**: Stores tenant information and emergency contacts
+* **Lease**: Manages rental agreements between tenants and property units
+* **Payment**: Tracks all financial transactions
+* **MaintenanceRequest**: Handles repair and maintenance workflow
 
 ## API Endpoints
 
-### Apartments
-- `GET /api/apartments/`: List apartments
-- `POST /api/apartments/`: Create apartment
-- `GET /api/apartments/{id}/`: Retrieve specific apartment
+### Properties
+* `GET /api/properties/`: List properties
+* `POST /api/properties/`: Create property
+* `GET /api/properties/{id}/`: Retrieve specific property
+* `PUT /api/properties/{id}/`: Update property
+* `DELETE /api/properties/{id}/`: Delete property
 
 ### Units
-- `GET /api/units/`: List units
-- `POST /api/units/`: Create unit
-- `GET /api/units/{id}/`: Retrieve specific unit
+* `GET /api/units/`: List units
+* `POST /api/units/`: Create unit
+* `GET /api/units/{id}/`: Retrieve specific unit
+* `PUT /api/units/{id}/`: Update unit
+* `DELETE /api/units/{id}/`: Delete unit
+
+### Tenants
+* `GET /api/tenants/`: List tenants
+* `POST /api/tenants/`: Create tenant
+* `GET /api/tenants/{id}/`: Retrieve specific tenant
+* `PUT /api/tenants/{id}/`: Update tenant
+* `DELETE /api/tenants/{id}/`: Delete tenant
 
 ### Leases
-- `GET /api/leases/`: List leases
-- `POST /api/leases/`: Create lease
-- `GET /api/leases/{id}/`: Retrieve specific lease
+* `GET /api/leases/`: List leases
+* `POST /api/leases/`: Create lease
+* `GET /api/leases/{id}/`: Retrieve specific lease
+* `PUT /api/leases/{id}/`: Update lease
+* `DELETE /api/leases/{id}/`: Delete lease
+* `GET /api/leases/{id}/document/`: Generate lease document
 
 ### Other Endpoints
-- Payments
-- Debts
-- Maintenance Requests
-- Expenses
-- Notifications
+* `GET/POST /api/payments/`: Manage payments
+* `GET/POST /api/maintenance-requests/`: Handle maintenance requests
+* `GET /api/dashboard/`: Get dashboard statistics
 
 ## Filtering and Search
 Most endpoints support:
-- Filtering by specific fields
-- Searching within text fields
-- Ordering results
+* Filtering by specific fields (e.g., `?status=active`)
+* Searching within text fields (e.g., `?search=smith`)
+* Ordering results (e.g., `?ordering=-created_at`)
 
 ## Authentication
-- Token-based authentication
-- User-specific permissions
-- Admin interface for full management
+* Token-based authentication
+* User-specific permissions
+* Admin interface for full management
 
 ## Development Notes
-- Uses Django Rest Framework
-- Comprehensive model relationships
-- Flexible filtering and search capabilities
+* Uses Django and Django Rest Framework
+* Comprehensive model relationships
+* PDF generation for lease documents
+* Email notifications for tenant communication
+* Dashboard with occupancy and financial metrics
 
-## Recommended Improvements
-- Add more advanced permission classes
-- Implement more complex filtering
-- Add custom actions to viewsets
-- Create more detailed reporting features
+## Testing
+```
+python manage.py test
+```
+
+
