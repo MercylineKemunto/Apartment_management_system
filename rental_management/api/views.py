@@ -10,8 +10,11 @@ from .models import (
 from .serializers import (
     ApartmentSerializer, UnitSerializer, LeaseSerializer, 
     PaymentSerializer, DebtSerializer, MaintenanceRequestSerializer, 
-    ExpenseSerializer, NotificationSerializer
+    ExpenseSerializer, NotificationSerializer, UserSerializer,
 )
+from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework.viewsets import ModelViewSet
 
 class ApartmentViewSet(viewsets.ModelViewSet):
     queryset = Apartment.objects.all()
@@ -81,6 +84,16 @@ class NotificationViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['user', 'is_read']
     ordering_fields = ['created_at']
+
+class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer 
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['user']
+   
+
+
 
 
 @login_required
