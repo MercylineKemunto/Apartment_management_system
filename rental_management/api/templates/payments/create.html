@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Create New Payment</h2>
+    <form id="paymentForm">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="lease" class="form-label">Lease</label>
+            <select name="lease" id="lease" class="form-select" required>
+                <option value="">Select a lease</option>
+                {% for lease in leases %}
+                <option value="{{ lease.id }}">{{ lease.tenant.username }} - {{ lease.unit.unit_number }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select name="payment_method" id="payment_method" class="form-select" required>
+                <option value="">Select payment method</option>
+                <option value="cash">Cash</option>
+                <option value="credit_card">Credit Card</option>
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="paypal">PayPal</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Payment</button>
+        <a href="{% url 'payment-list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        lease: document.getElementById('lease').value,
+        amount: document.getElementById('amount').value,
+        payment_method: document.getElementById('payment_method').value
+    };
+
+    fetch('{% url "payment-list" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '{% url "payment-list" %}';
+        } else {
+            return response.json().then(data => {
+                alert(data.error || 'Error creating payment');
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error creating payment');
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

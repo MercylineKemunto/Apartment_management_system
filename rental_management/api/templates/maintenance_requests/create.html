@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Create Maintenance Request</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="unit" class="form-label">Unit</label>
+            <select name="unit" id="unit" class="form-select" required>
+                <option value="">Select a unit</option>
+                {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.unit_number }} - {{ unit.apartment.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select name="status" id="status" class="form-select" required>
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Request</button>
+        <a href="{% url 'maintenance_requests_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

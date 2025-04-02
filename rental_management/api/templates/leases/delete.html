@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Delete Lease</h2>
+    <div class="alert alert-danger">
+        <p>Are you sure you want to delete the lease for:</p>
+        <ul>
+            <li>Tenant: {{ lease.tenant.username }}</li>
+            <li>Unit: {{ lease.unit.unit_number }}</li>
+            <li>Start Date: {{ lease.start_date|date:"M d, Y" }}</li>
+            <li>End Date: {{ lease.end_date|date:"M d, Y" }}</li>
+        </ul>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a href="{% url 'leases_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 
