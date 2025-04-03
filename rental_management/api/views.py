@@ -273,36 +273,43 @@ def create_maintenance_request(request):
 
 @login_required
 def dashboard(request):
+    # Get total apartments
     total_apartments = Apartment.objects.count()
-    total_units = Unit.objects.count()
+    
+    # Get unit statistics
     occupied_units = Unit.objects.filter(is_occupied=True).count()
-    vacant_units = total_units - occupied_units
-
     
-    total_monthly_revenue = Unit.objects.aggregate(total_rent=Sum('rent_amount'))['total_rent'] or 0
-    total_outstanding_debts = Debt.objects.filter(is_paid=False).aggregate(total=Sum('amount'))['total'] or 0
-
+    # Get active leases
+    active_leases = Lease.objects.filter(
+        end_date__gte=timezone.now().date()
+    ).count()
     
-    open_maintenance_requests = MaintenanceRequest.objects.filter(status='Open').count()
-    recent_maintenance_requests = MaintenanceRequest.objects.filter(status='Open')[:5]
-
-   
-    recent_leases = Lease.objects.order_by('-start_date')[:5]
-
+    # Get pending maintenance requests
+    pending_maintenance = MaintenanceRequest.objects.filter(
+        status__in=['Open', 'In Progress']
+    ).count()
     
-    upcoming_payments = Debt.objects.filter(is_paid=False).order_by('due_date')[:5]
-
+    # Get recent payments with proper relationship traversal
+    recent_payments = Payment.objects.select_related(
+        'lease'
+    ).prefetch_related(
+        'lease__tenant'
+    ).order_by('-payment_date')[:5]
+    
+    # Get recent maintenance requests
+    recent_maintenance = MaintenanceRequest.objects.select_related(
+        'unit'
+    ).order_by('-request_date')[:5]
+    
     context = {
         'total_apartments': total_apartments,
         'occupied_units': occupied_units,
-        'vacant_units': vacant_units,
-        'total_monthly_revenue': total_monthly_revenue,
-        'total_outstanding_debts': total_outstanding_debts,
-        'open_maintenance_requests': open_maintenance_requests,
-        'recent_maintenance_requests': recent_maintenance_requests,
-        'recent_leases': recent_leases,
-        'upcoming_payments': upcoming_payments,
+        'active_leases': active_leases,
+        'pending_maintenance': pending_maintenance,
+        'recent_payments': recent_payments,
+        'recent_maintenance': recent_maintenance,
     }
+    
     return render(request, 'dashboard.html', context)
 
 @login_required
