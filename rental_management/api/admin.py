@@ -14,8 +14,11 @@ class ApartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
-    list_display = ['unit_number', 'apartment', 'size', 'rent_amount', 'is_occupied']
-    list_filter = ['apartment', 'is_occupied']
+    list_display = ('unit_number', 'apartment', 'size', 'rent_amount', 'is_occupied')
+    list_filter = ('apartment', 'is_occupied')
+    search_fields = ('unit_number', 'apartment__name')
+    list_editable = ('is_occupied',)
+    ordering = ('apartment', 'unit_number')
 
 @admin.register(Lease)
 class LeaseAdmin(admin.ModelAdmin):
@@ -46,3 +49,12 @@ class ExpenseAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ['user', 'message', 'created_at', 'is_read']
     list_filter = ['is_read']
+
+# Register other models if not already registered
+admin.site.register(Apartment)
+admin.site.register(Lease)
+admin.site.register(Payment)
+admin.site.register(Debt)
+admin.site.register(MaintenanceRequest)
+admin.site.register(Expense)
+admin.site.register(Notification)
