@@ -1,4 +1,144 @@
-# Property Management System
+# Apartment Management System
+
+A comprehensive Django-based apartment management system that handles property management, tenant tracking, payments, and maintenance requests.
+
+## Features
+
+### Property Management
+- **Apartments**: Track multiple apartment buildings
+- **Units**: Manage individual units with occupancy status
+- **Leases**: Handle lease agreements with start/end dates
+- **Tenants**: Manage tenant information and assignments
+
+### Financial Management
+- **Payments**: Track and record rent payments
+- **Debts**: Monitor outstanding balances
+- **Expenses**: Record property-related expenses
+
+### Maintenance System
+- **Requests**: Submit and track maintenance requests
+- **Status Updates**: Monitor request progress
+- **Unit-Specific**: Link requests to specific units
+
+### User Management
+- **Roles**:
+  - Admin: Full system access
+  - Manager: Property management
+  - Tenant: Access to personal dashboard
+
+### Notifications
+- System-wide notifications
+- User-specific alerts
+- Maintenance updates
+
+## Project Structure
+
+```
+rental_management/
+├── api/
+│   ├── models.py      # Database models
+│   ├── views.py       # View logic
+│   ├── urls.py        # URL routing
+│   ├── templates/     # HTML templates
+│   └── static/        # Static files
+├── rental_management/
+│   ├── settings.py    # Project settings
+│   ├── urls.py        # Main URL configuration
+│   └── wsgi.py        # WSGI configuration
+└── manage.py          # Django management script
+```
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd apartment_management_system
+```
+
+2. Create and activate virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Run migrations:
+```bash
+python manage.py migrate
+```
+
+5. Create superuser:
+```bash
+python manage.py createsuperuser
+```
+
+## Usage
+
+### Admin/Manager Access
+1. Log in with admin credentials
+2. Access the dashboard for:
+   - Property management
+   - Tenant tracking
+   - Financial overview
+   - Maintenance requests
+
+### Tenant Access
+1. Log in with tenant credentials
+2. Access tenant dashboard for:
+   - Lease information
+   - Payment history
+   - Maintenance requests
+   - Notifications
+
+## Created Tenants
+
+The system includes the following tenant accounts:
+
+| Username | Email | Password |
+|----------|-------|----------|
+| tenant1  | tenant1@example.com | tenant123 |
+
+## Development
+
+### Running the Server
+```bash
+python manage.py runserver
+```
+
+### Creating New Tenants
+```bash
+python manage.py create_tenant <username> <email> <password>
+```
+
+### Database Management
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Django Framework
+- Bootstrap for UI components
+- Font Awesome for icons
 
 ## Project Overview
 A comprehensive Django-based Property Management System that allows management of properties, units, leases, tenants, payments, maintenance requests, and more.
