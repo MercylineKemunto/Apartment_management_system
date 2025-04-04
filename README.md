@@ -36,31 +36,31 @@ A comprehensive Django-based apartment management system that handles property m
 ```
 rental_management/
 ├── api/
-│   ├── models.py      # Database models
-│   ├── views.py       # View logic
-│   ├── urls.py        # URL routing
-│   ├── templates/     # HTML templates
-│   └── static/        # Static files
+│   ├── models.py      
+│   ├── views.py       
+│   ├── urls.py        
+│   ├── templates/     
+│   └── static/        
 ├── rental_management/
-│   ├── settings.py    # Project settings
-│   ├── urls.py        # Main URL configuration
-│   └── wsgi.py        # WSGI configuration
-└── manage.py          # Django management script
+│   ├── settings.py    
+│   ├── urls.py        
+│   └── wsgi.py       
+└── manage.py          
 ```
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone 
 cd apartment_management_system
 ```
 
 2. Create and activate virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+
+venv\Scripts\activate     
 ```
 
 3. Install dependencies:
@@ -244,9 +244,9 @@ python manage.py runserver
 
 ## Filtering and Search
 Most endpoints support:
-* Filtering by specific fields (e.g., `?status=active`)
-* Searching within text fields (e.g., `?search=smith`)
-* Ordering results (e.g., `?ordering=-created_at`)
+* Filtering by specific fields 
+* Searching within text fields 
+* Ordering results 
 
 ## Authentication
 * Token-based authentication
@@ -264,5 +264,8 @@ Most endpoints support:
 ```
 python manage.py test
 ```
+## Bugs
+*The UI in the payment management
+*The Admin Interface in the units creation and tracking payments
 
 
